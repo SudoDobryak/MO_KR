@@ -24,10 +24,10 @@ class DlgMain(QtWidgets.QMainWindow, gui.Ui_MainWindow):
             return
         try:
             df.fillna('', inplace=True)
-            self.listWidget.setRowCount(df.shape[0])
-            self.listWidget.setColumnCount(df.shape[1])
-            self.listWidget.setHorizontalHeaderLabels(df.columns)
-            self.listWidget.verticalHeader().setVisible(False)
+            self.tableWidget.setRowCount(df.shape[0])
+            self.tableWidget.setColumnCount(df.shape[1])
+            self.tableWidget.setHorizontalHeaderLabels(df.columns)
+            self.tableWidget.verticalHeader().setVisible(False)
             # returns pandas array object
             for row in df.iterrows():
                 values = row[1]
@@ -35,7 +35,7 @@ class DlgMain(QtWidgets.QMainWindow, gui.Ui_MainWindow):
                     if isinstance(value, (float, int)):
                         value = '{0:0,.0f}'.format(value)
                         tableItem = QtWidgets.QTableWidgetItem(str(value))
-                        self.listWidget.setItem(row[0], col_index, tableItem)
+                        self.tableWidget.setItem(row[0], col_index, tableItem)
         except Exception as exc:
             print(exc)
 
