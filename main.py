@@ -17,6 +17,7 @@ class DlgMain(QtWidgets.QMainWindow, gui.Ui_MainWindow):
         super().__init__()
         self.setupUi(self)
         self.pushButton.clicked.connect(lambda xl_path=book, sheet_name=sheet: self.loadEcxelData(xl_path, sheet_name))
+        self.pushButton_2.clicked.connect(self.alg)
 
     def loadEcxelData(self, excel_file_dir, worksheet_name):
         df = pd.read_excel(excel_file_dir, worksheet_name)
@@ -39,6 +40,21 @@ class DlgMain(QtWidgets.QMainWindow, gui.Ui_MainWindow):
         except Exception as exc:
             print(exc)
 
+    def alg(self):
+        m = symplex.gen_matrix(7, 2)
+        symplex.constrain(m, f"0,2,5,3,0,2,4,G,470")
+        symplex.constrain(m, f"3,2,0,1,2,1,0,G,{self.textEdit.toPlainText()}")
+        symplex.obj(m, '10,25,0,35,30,20,10')
+        a = symplex.minz(m)
+        self.textEdit_2.setText(f"X1 = {a['x1']}\n"
+                                f"X2 = {a['x2']}\n"
+                                f"X3 = {a['x3']}\n"
+                                f"X4 = {a['x4']}\n"
+                                f"X5 = {a['x5']}\n"
+                                f"X6 = {a['x6']}\n"
+                                f"X7 = {a['x7']}\n"
+                                f"Минимальная функция равна: {a['min']}")
+
 
 def main():
     # Recompile ui
@@ -49,6 +65,7 @@ def main():
     dlgMain = DlgMain()  # create main GUI window
     dlgMain.show()  # show GUI
     sys.exit(app.exec_())  # execute application
+
 
 if __name__ == '__main__':
     main()
